@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="StackExchange.Redis" Version="3.4.35" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CacheShield.Application\CacheShield.Application.csproj" />
     <ProjectReference Include="..\CacheShield.Core\CacheShield.Core.csproj" />
   </ItemGroup>
