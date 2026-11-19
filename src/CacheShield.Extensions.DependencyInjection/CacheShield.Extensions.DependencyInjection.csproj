@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CacheShield.Application\CacheShield.Application.csproj" />
+    <ProjectReference Include="..\CacheShield.Core\CacheShield.Core.csproj" />
+    <ProjectReference Include="..\CacheShield.Infrastructure.Redis\CacheShield.Infrastructure.Redis.csproj" />
+  </ItemGroup>
+
+</Project>
