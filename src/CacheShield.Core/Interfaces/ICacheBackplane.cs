@@ -8,7 +8,7 @@ namespace CacheShield.Core.Interfaces
 {
     public interface ICacheBackplane
     {
-        Task PublishInvalidationAsync(string key, CancellationToken cancellationToken = default);//sunuculara iletim
-        void SubscribeInvalidation(Action<string> onKeyInvalidated);//dinleme
+        Task PublishInvalidationAsync(string key, string originId, CancellationToken cancellationToken = default);
+        void SubscribeInvalidation(Action<string, string> onKeyInvalidated);
     }
 }
