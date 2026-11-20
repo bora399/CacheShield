@@ -11,6 +11,12 @@ Most cache setups either hit Redis on every single read or leave the database ex
 - Falls back to Redis (L2) and uses Redis Pub/Sub (with per-instance origin filtering) to invalidate stale L1 keys across instances.
 - Fails open when Redis is unreachable, falling back to L1 and the data source instead of throwing on every request.
 
+## Installation
+
+```bash
+dotnet add package bora399.CacheShield.Extensions.DependencyInjection
+```
+
 ## Usage
 
 Register it in `Program.cs`:
