@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CacheShield.Application\CacheShield.Application.csproj" />
-    <ProjectReference Include="..\CacheShield.Core\CacheShield.Core.csproj" />
+    <ProjectReference Include="..\..\src\CacheShield.Core\CacheShield.Core.csproj" />
+    <ProjectReference Include="..\..\src\CacheShield.Application\CacheShield.Application.csproj" />
   </ItemGroup>
 
 </Project>
