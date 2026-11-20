@@ -38,33 +38,40 @@ public sealed class HybridCacheService : ICacheShield
         });
     }
 
-    public async Task<T> GetOrCreateAsync<T>(
-        string key,
-        Func<CancellationToken, Task<T>> factory,
-        CacheEntryOptions? options = null,
-        CancellationToken cancellationToken = default)
+    public ValueTask<T> GetOrCreateAsync<T>(
+    string key,
+    Func<CancellationToken, Task<T>> factory,
+    CacheEntryOptions? options = null,
+    CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
         ArgumentNullException.ThrowIfNull(factory);
 
-        var entryOptions = options ?? CacheEntryOptions.Default;
-
-        // önce rame bak
         if (_l1Cache.TryGet<T>(key, out var l1Value))
         {
-            return l1Value!;
+            return new ValueTask<T>(l1Value!);
         }
 
-        // ramde yoksa singleflight kilidine gir
+        return new ValueTask<T>(GetOrCreateSlowAsync(key, factory, options, cancellationToken));
+    }
+
+    private async Task<T> GetOrCreateSlowAsync<T>(
+        string key,
+        Func<CancellationToken, Task<T>> factory,
+        CacheEntryOptions? options,
+        CancellationToken cancellationToken)
+    {
+        var entryOptions = options ?? CacheEntryOptions.Default;
+
         return await _singleflight.ExecuteAsync(key, async () =>
         {
-            //bu bi asenkron oldugundan l1 yani rame istek gelmiş olabilir o sırada
+            // Double-Check: Biz kapıda beklerken önceki istek L1'i doldurmuş olabilir
             if (_l1Cache.TryGet<T>(key, out var doubleCheckedL1Value))
             {
                 return doubleCheckedL1Value!;
             }
 
-            //redise bak
+            // L2'ye (Redis) bak — Fail-Open
             var (foundInL2, l2Value) = await TryGetFromL2SafeAsync<T>(key).ConfigureAwait(false);
             if (foundInL2)
             {
@@ -72,10 +79,9 @@ public sealed class HybridCacheService : ICacheShield
                 return l2Value!;
             }
 
-            //ram ve rediste yoksa bir kez factorye bak
+            // İki katmanda da yok: Veritabanına (factory) yalnızca 1 kez git
             var freshValue = await factory(CancellationToken.None).ConfigureAwait(false);
 
-            // taze veriyi önce redise sonra rame güvenli ve asenkron bicimde yaz.
             await SetToL2SafeAsync(key, freshValue, entryOptions.L2Expiration).ConfigureAwait(false);
             _l1Cache.Set(key, freshValue, entryOptions.L1Expiration);
 

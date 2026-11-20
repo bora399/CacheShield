@@ -9,7 +9,7 @@ namespace CacheShield.Application.Abstractions
 {
     public interface ICacheShield
     {
-        Task<T> GetOrCreateAsync<T>(
+        ValueTask<T> GetOrCreateAsync<T>(
             string key,
             Func<CancellationToken, Task<T>> factory,
             CacheEntryOptions? options = null,

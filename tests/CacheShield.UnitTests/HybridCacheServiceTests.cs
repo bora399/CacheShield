@@ -72,7 +72,7 @@ public class HybridCacheServiceTests
                 Interlocked.Increment(ref factoryCalls);
                 await Task.Delay(50);
                 return "Monitör";
-            }))
+            }).AsTask())
             .ToArray();
 
         var results = await Task.WhenAll(tasks);
