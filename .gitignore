@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 BenchmarkDotNet.Artifacts/
+#paket dosyalari githuba gitmesin
+nupkgs/

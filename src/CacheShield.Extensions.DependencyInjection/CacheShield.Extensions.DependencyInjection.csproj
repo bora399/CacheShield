@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<Description>Dependency injection extensions (AddCacheShield) and option validation for CacheShield.</Description>
   </PropertyGroup>
 
   <ItemGroup>

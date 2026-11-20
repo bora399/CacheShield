@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<Description>StackExchange.Redis L2 cache, Pub/Sub backplane, and UTF-8 JSON serializer for CacheShield.</Description>
   </PropertyGroup>
 
   <ItemGroup>
